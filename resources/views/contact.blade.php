@@ -1,11 +1,9 @@
 @extends('layout')
-
-@section('title', 'Home')
-
+@section('title', 'Contact')
 @section('content')
     <div class="container">
-        <h1>Home</h1>
-        <p>This is home page</p>
+        <h1>Contact</h1>
+        <p>This is contact page</p>
 
     </div>
 @endsection

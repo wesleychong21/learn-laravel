@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\GuitarsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,10 +15,33 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', [HomeController::class,'index'])->name('home.index');
+Route::get('/about', [HomeController::class,'about'])->name('home.about');
+Route::get('/contact', [HomeController::class,'contact'])->name('home.contact');
 
-Route::get('/header8', function () {
-    return view('header8');
+Route::resource('guitars', GuitarsController::class);
+
+Route::get('/store/{category?}/{item?}', function ($category = null, $item= null) {
+   
+    if(isset($category))
+    {
+        if(isset($item))
+            return "you are viewing the store for {$category} for {$item}";
+        else
+        return "you are viewing the store for  {$category}";
+    }
+        
+    else
+        return 'you are viewing the store for all categories ' ;
+
 });
+/*
+Route::get('/store', function () {
+    $category = request('category');
+    if(isset($category))
+        return 'you are viewing the store for ' . strip_tags($category);
+    else
+        return 'you are viewing the store for all categories ' ;
+
+});
+*/
