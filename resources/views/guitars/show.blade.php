@@ -14,7 +14,10 @@
             {{$guitar['name']}}</h3>
         <ul>
             <li>
-                Made : {{$guitar['brand']}}
+                Brand : {{$guitar['brand']}}
+            </li>
+            <li>
+                Year Made : {{$guitar['year_made']}}
             </li>
         </ul>
 

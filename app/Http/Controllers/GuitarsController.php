@@ -3,19 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Guitar;
+use App\Http\Requests\GuitarFormRequest;
+
 
 class GuitarsController extends Controller
 {
-    private static function getData()
-    {
-        return [
-            ['id'=>'1','name'=>'American', 'brand'=>'Brand A'],
-            ['id'=>'2','name'=>'Banana', 'brand'=>'Brand B'],
-            ['id'=>'3','name'=>'Car', 'brand'=>'Brand C'],
-            ['id'=>'4','name'=>'Doddle', 'brand'=>'Brand D'],
+    // private static function getData()
+    // {
+    //     return [
+    //         ['id'=>'1','name'=>'American', 'brand'=>'Brand A'],
+    //         ['id'=>'2','name'=>'Banana', 'brand'=>'Brand B'],
+    //         ['id'=>'3','name'=>'Car', 'brand'=>'Brand C'],
+    //         ['id'=>'4','name'=>'Doddle', 'brand'=>'Brand D'],
 
-        ];
-    }
+    //     ];
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -26,7 +29,7 @@ class GuitarsController extends Controller
         // GET
 
         return view('guitars.index', [
-            'guitars'=>self::getData(),
+            'guitars'=> Guitar::all(),
             'userInput'=>'<script>alert("Hello")</script>'
         ]);
     }
@@ -39,6 +42,7 @@ class GuitarsController extends Controller
     public function create()
     {
         // GET
+        return view('guitars.create');
     }
 
     /**
@@ -47,9 +51,16 @@ class GuitarsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(GuitarFormRequest $request)
     {
         // POST
+        $data = $request->validated();
+
+        $guitar = new Guitar();
+
+        $guitar->create($data);
+
+        return redirect()->route('guitars.index');
     }
 
     /**
@@ -58,20 +69,11 @@ class GuitarsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Guitar $guitar)
     {
         // GET
-        $guitars = self::getData();
-
-        $index = array_search($id, array_column($guitars, 'id'));
-
-        if($index === false)
-        {
-            abort(404);
-        }
-
         return view('guitars.show', [
-            'guitar' => $guitars[$index]
+            'guitar' => $guitar
         ]);
     }
 
@@ -81,9 +83,13 @@ class GuitarsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Guitar $guitar)
     {
         // GET
+        return view('guitars.edit', [
+            'guitar' => $guitar
+        ]);
+       
     }
 
     /**
@@ -93,9 +99,14 @@ class GuitarsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(GuitarFormRequest $request, Guitar $guitar)
     {
         // POST
+        $data = $request->validated();      
+
+        $guitar->update($data);
+
+        return redirect()->route('guitars.show', ['guitar'=>$guitar]);
     }
 
     /**
